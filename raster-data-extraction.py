@@ -25,23 +25,20 @@ def compute_values(raster, band, lat, lon):
   result2 = raster[band-1, row, col]
   return result, result2
 
-# loop through all coordinates in the dataframe and store corresponding turbidity values
+# loop through all coordinates in the dataframe to calculate and store turbidity & chl-a values
 point_turb = []
 avg_turb = []
-for i,j in zip(shp['lat'], shp['lon']):
-    result, result2 = compute_values(rst, 3, i, j)
-    avg_turb.append(result)
-    point_turb.append(result2)
-
-# loop through all coordinates in the dataframe and store corresponding chl-a values
 point_chl = []
 avg_chl = []
 for i,j in zip(shp['lat'], shp['lon']):
-    result, result2 = compute_values(rst, 1, i, j)
+    result, result2 = compute_values(rst, 3, i, j) # turbidity band
+    avg_turb.append(result)
+    point_turb.append(result2)
+    result, result2 = compute_values(rst, 1, i, j) #  chl-a band
     avg_chl.append(result)
     point_chl.append(result2)
 
-# write values to a dataframe for the turbidity & chl-a bands
+# write turbidity and chl-a values to a dataframe
 shp['sat_turb'], shp['sat_avg_turb'] = point_turb, avg_turb
 shp['sat_turb_diff'] = shp['turb'] - shp['sat_turb'] # calculate difference between in-situ and satellite data
 shp['sat_avg_turb_diff'] = shp['turb'] - shp['sat_avg_turb'] 
