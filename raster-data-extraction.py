@@ -24,9 +24,10 @@ def calc_values(raster, band, lat, lon):
     center_pixel_value = raster.read()[band-1, row, col]
     return average_value, center_pixel_value
 
-point_turb = [calc_values(rst, 3, i, j)[1] for i, j in zip(shp['lat'], shp['lon'])]
+# loop through coordinates list and extract turbidity/chl-a values and assign to variables
+point_turb = [calc_values(rst, 3, i, j)[1] for i, j in zip(shp['lat'], shp['lon'])] # band 3 = turbidity
 avg_turb = [calc_values(rst, 3, i, j)[0] for i, j in zip(shp['lat'], shp['lon'])]
-point_chl = [calc_values(rst, 1, i, j)[1] for i, j in zip(shp['lat'], shp['lon'])]
+point_chl = [calc_values(rst, 1, i, j)[1] for i, j in zip(shp['lat'], shp['lon'])] # band 1 = chl-a
 avg_chl = [calc_values(rst, 1, i, j)[0] for i, j in zip(shp['lat'], shp['lon'])]
 
 # calculate difference between in-situ/satellite data and write values to a dataframe
